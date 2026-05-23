@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library LMS - System Profile & Settings</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" id="theme-style" href="css/darkmode.css" disabled>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    /* Advanced Professional UI Layout Enhancements */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-top: 20px;
+    }
+    @media (min-width: 992px) {
+      .settings-grid {
+        grid-template-columns: 280px 1fr;
+      }
+    }
+    
+    .settings-sidebar-card {
+      background: var(--bg-card, #ffffff);
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      text-align: center;
+      height: fit-content;
+      border: 1px solid transparent;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .profile-avatar-wrapper {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 16px;
+    }
+    .profile-large-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary-color, #007bff);
+    }
+    .meta-user-role {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(0, 123, 255, 0.1);
+      color: var(--primary-color, #007bff);
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .settings-main-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .settings-section-card {
+      background: var(--bg-card, #ffffff);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-top: 4px solid var(--primary-color, #007bff);
+      border-left: 1px solid transparent;
+      border-right: 1px solid transparent;
+      border-bottom: 1px solid transparent;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .settings-section-card.security-card {
+      border-top-color: #dc3545;
+    }
+    .settings-section-card.registry-card {
+      border-top-color: #28a745;
+    }
+    .card-header-block {
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .card-header-block h2 {
+      margin: 0;
+      font-size: 1.15em;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-body-block {
+      padding: 24px;
+    }
+
+    /* Detailed Form Layout Frameworks */
+    .form-row-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (min-width: 768px) {
+      .form-row-layout.dual-column {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .form-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-field-group label {
+      font-weight: 600;
+      font-size: 0.9em;
+      color: var(--text-color, #333);
+    }
+    .form-field-group input, .form-field-group select {
+      height: 40px;
+      padding: 0 12px;
+      border: 1px solid #dcdcdc;
+      border-radius: 6px;
+      background: var(--bg-input, #fff);
+      color: var(--text-color, #333);
+      font-size: 0.95em;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-field-group input:focus, .form-field-group select:focus {
+      outline: none;
+      border-color: var(--primary-color, #007bff);
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+    }
+    .form-field-group input:disabled {
+      background: #f4f6f9;
+      color: #888;
+      cursor: not-allowed;
+      border-color: #e2e8f0;
+    }
+    .field-instruction-text {
+      font-size: 0.8em;
+      color: #6c757d;
+      margin-top: 2px;
+    }
+
+    /* Dynamic Administrative Data Table Styling */
+    .registry-table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+    .registry-system-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.92em;
+    }
+    .registry-system-table th {
+      padding: 12px 16px;
+      font-weight: 600;
+      border-bottom: 2px solid rgba(0,0,0,0.1);
+      background: rgba(0,0,0,0.02);
+    }
+    .registry-system-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .badge-privilege {
+      display: inline-block;
+      padding: 3px 10px;
+      font-size: 0.8em;
+      font-weight: 700;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .badge-privilege.badge-admin { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+    .badge-privilege.badge-manager { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .badge-privilege.badge-user { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+
+    /* Modern action controls */
+    .action-button-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    .btn-action {
+      height: 40px;
+      padding: 0 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.95em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.1s;
+      border: none;
+    }
+    .btn-action.btn-primary {
+      background-color: var(--primary-color, #007bff);
+      color: #ffffff;
+    }
+    .btn-action.btn-primary:hover { background-color: #0069d9; }
+    .btn-action.btn-danger {
+      background-color: #dc3545;
+      color: #ffffff;
+    }
+    .btn-action.btn-danger:hover { background-color: #c82333; }
+    .btn-action:active { transform: scale(0.98); }
+
+    /* Floating Custom Alert Box */
+    #systemToastAlert {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      padding: 16px 24px;
+      border-radius: 6px;
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 9999;
+      display: none;
+      animation: slideInRight 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes slideInRight {
+      from { transform: translateX(120%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Dark theme style overrides applied via script engine injection loops */
+    .dark-theme .settings-sidebar-card,
+    .dark-theme .settings-section-card {
+      background-color: #1e293b !important;
+      color: #f8fafc !important;
+      border-color: #334155 !important;
+    }
+    .dark-theme .form-field-group label { color: #f8fafc !important; }
+    .dark-theme .field-instruction-text { color: #94a3b8 !important; }
+    .dark-theme .registry-system-table th { background: rgba(255,255,255,0.03) !important; color: #f8fafc !important; }
+    .dark-theme .registry-system-table td { color: #cbd5e1 !important; border-bottom-color: #334155 !important; }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-top-group">
+        <div class="sidebar-header">
+          <i class="fas fa-university"></i>
+          <span class="brand-text">Library LMS</span>
+        </div>
+        <ul>
+          <li><a href="dashboard.html"><i class="fas fa-home"></i> <span class="menu-text">Dashboard</span></a></li>
+          <li><a href="booklist.html"><i class="fas fa-book"></i> <span class="menu-text">Books</span></a></li>
+          <li><a href="category.html"><i class="fas fa-folder"></i> <span class="menu-text">Categories</span></a></li>
+          <li><a href="borrow.html"><i class="fas fa-book-reader"></i> <span class="menu-text">Borrow</span></a></li>
+          <li><a href="return.html"><i class="fas fa-undo"></i> <span class="menu-text">Return</span></a></li>
+          <li><a href="studentlist.html"><i class="fas fa-users"></i> <span class="menu-text">Students</span></a></li>
+          <li><a href="courselist.html"><i class="fas fa-list"></i> <span class="menu-text">Courses</span></a></li>
+          <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> <span class="menu-text">Logout</span></a></li>
+        </ul>
+      </div>
+      <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">
+        <i class="bi bi-moon-stars-fill" id="darkModeIcon"></i>
+      </button>
+    </aside>
+
+    <div class="content-wrapper">
+      <header class="main-top-navbar">
+        <div class="header-left-side">
+          <button id="sidebarToggleBtn" class="nav-toggle-btn"><i class="fa-solid fa-bars"></i></button>
+          <h1 class="page-current-title">Account Settings</h1>
+        </div>
+        <div class="header-right-side">
+          <div class="profile-dropdown-container">
+            <button class="profile-trigger-btn" onclick="toggleProfileMenu()">
+              <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="navbar-avatar">
+              <span class="navbar-username" id="navProfileName">Guest User</span>
+              <i class="fa-solid fa-chevron-down arrow-icon"></i>
+            </button>
+            <div id="profileDropdownMenu" class="dropdown-actions-panel">
+              <div class="dropdown-header-info">
+                <strong id="dropdownRoleTitle">User Role</strong>
+                <small class="user-email-text" id="dropdownEmailText">username@library.com</small>
+              </div>
+              <hr class="divider-line">
+              <a href="profile-settings.html" class="dropdown-action-item"><i class="fa-solid fa-user-gear"></i> Account Settings</a>
+              <a href="#" class="dropdown-action-item logout-action" onclick="executeLogoutAction(event)"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div class="dashboard-header">
+          <h1><i class="fa-solid fa-sliders"></i> Control Center Settings</h1>
+        </div>
+
+        <div class="settings-grid">
+          <div class="settings-sidebar-card">
+            <div class="profile-avatar-wrapper">
+              <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" class="profile-large-avatar" id="sidebarCardAvatar">
+            </div>
+            <h3 id="sidebarCardName" style="margin: 0; font-size: 1.2em;">User Full Name</h3>
+            <p id="sidebarCardEmail" style="margin: 4px 0 12px; color: #6c757d; font-size: 0.85em;">no-email@librarylms.com</p>
+            <span id="sidebarCardRole" class="meta-user-role">ADMINISTRATOR</span>
+          </div>
+
+          <div class="settings-main-panel">
+            
+            <div class="settings-section-card">
+              <div class="card-header-block">
+                <h2><i class="fa-regular fa-id-card" style="color: var(--primary-color);"></i> Profile Information</h2>
+              </div>
+              <div class="card-body-block">
+                <form id="profileInfoForm">
+                  <div class="form-row-layout dual-column">
+                    <div class="form-field-group">
+                      <label for="infoUsername">Account Username ID</label>
+                      <input type="text" id="infoUsername" disabled>
+                      <span class="field-instruction-text">System ID cannot be changed after registration.</span>
+                    </div>
+                    <div class="form-field-group">
+                      <label for="infoRole">System Role Designation</label>
+                      <select id="infoRole" required>
+                        <option value="admin">System Administrator</option>
+                        <option value="user">Librarian Staff</option>
+                        <option value="manager">Library Manager</option>
+                      </select>
+                      <span class="field-instruction-text" id="roleRestrictionNotice">Controls your layout operations permissions.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-row-layout dual-column">
+                    <div class="form-field-group">
+                      <label for="infoFullName">Display Account Identity Name</label>
+                      <input type="text" id="infoFullName" required placeholder="Ex: Muhammad Ali">
+                      <span class="field-instruction-text">The name rendered across top headers and receipts.</span>
+                    </div>
+                    <div class="form-field-group">
+                      <label for="infoEmail">Email Address</label>
+                      <input type="email" id="infoEmail" required placeholder="student@university.edu.my">
+                      <span class="field-instruction-text">Primary contact communication variable string.</span>
+                    </div>
+                  </div>
+
+                  <div class="action-button-row">
+                    <button type="submit" class="btn-action btn-primary"><i class="fa-solid fa-circle-check"></i> Update Identity</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="settings-section-card security-card">
+              <div class="card-header-block">
+                <h2><i class="fa-solid fa-shield-halved" style="color: #dc3545;"></i> Authentication Security</h2>
+              </div>
+              <div class="card-body-block">
+                <form id="securityCredentialsForm">
+                  <div class="form-row-layout">
+                    <div class="form-field-group">
+                      <label for="securityCurrentPass">Current Active Password</label>
+                      <input type="password" id="securityCurrentPass" required placeholder="••••••••••••">
+                    </div>
+                  </div>
+
+                  <div class="form-row-layout dual-column">
+                    <div class="form-field-group">
+                      <label for="securityNewPass">New Setup Password</label>
+                      <input type="password" id="securityNewPass" required minlength="4" placeholder="Minimum 4 characters">
+                    </div>
+                    <div class="form-field-group">
+                      <label for="securityConfirmPass">Confirm New Password</label>
+                      <input type="password" id="securityConfirmPass" required minlength="4" placeholder="Verify matching string">
+                    </div>
+                  </div>
+
+                  <div class="action-button-row">
+                    <button type="submit" class="btn-action btn-danger"><i class="fa-solid fa-key"></i> Commit Password Modification</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div id="adminUserRegistrySection" class="settings-section-card registry-card" style="display: none;">
+              <div class="card-header-block">
+                <h2><i class="fa-solid fa-users-gear" style="color: #28a745;"></i> System Users Registry (Administrative View)</h2>
+              </div>
+              <div class="card-body-block">
+                <div class="registry-table-container">
+                  <table class="registry-system-table" id="adminUserTable">
+                    <thead>
+                      <tr>
+                        <th>Full Name</th>
+                        <th>Username</th>
+                        <th>Email Address</th>
+                        <th>Security Privilege Tier</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="systemToastAlert"></div>
+        <footer style="text-align: center; padding: 20px 10px; margin-top: 40px; font-size: 0.85rem; color: #888; border-top: 1px solid rgba(0,0,0,0.08); width: 100%;">
+          <div style="margin-bottom: 5px; font-weight: 600; letter-spacing: 0.3px;">
+            Library LMS &bull; Advanced Web Application Interface
+          </div>
+          <div style="font-size: 0.80rem; opacity: 0.8;">
+            &copy; 2026 Universiti Teknologi MARA (UiTM) &bull; IMS566 Individual Project Assignment
+          </div>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const themeStyle = document.getElementById('theme-style');
+
+    // Universal Global Stylesheet Application Engines
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    applyTheme(savedTheme);
+
+    darkModeToggle.addEventListener('click', () => {
+      const currentTheme = localStorage.getItem('theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      applyTheme(newTheme);
+      
+      // Sync execution update directly into central theme function if defined in js/main.js
+      if(typeof initTheme === 'function') initTheme();
+    });
+
+    function applyTheme(theme) {
+      localStorage.setItem('theme', theme);
+      if (theme === 'dark') {
+        if(themeStyle) themeStyle.disabled = false;
+        if(darkModeIcon) darkModeIcon.className = 'bi bi-sun-fill';
+        document.body.classList.add('dark-theme');
+      } else {
+        if(themeStyle) themeStyle.disabled = true;
+        if(darkModeIcon) darkModeIcon.className = 'bi bi-moon-stars-fill';
+        document.body.classList.remove('dark-theme');
+      }
+    }
+
+    function toggleProfileMenu() {
+      document.getElementById('profileDropdownMenu').classList.toggle('show');
+    }
+
+    window.addEventListener('click', function(event) {
+      if (!event.target.closest('.profile-dropdown-container')) {
+        const dropdown = document.getElementById('profileDropdownMenu');
+        if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
+      }
+    });
+
+    function executeLogoutAction(event) {
+      event.preventDefault();
+      if (confirm("Are you sure you want to log out from the dashboard terminal?")) {
+        localStorage.removeItem('user'); 
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Advanced Page Controller Operations Lifecycle
+    document.addEventListener("DOMContentLoaded", function() {
+      if (localStorage.getItem('sidebarState') === 'collapsed') document.body.classList.add('sidebar-collapsed');
+      
+      const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+      if (sidebarToggleBtn) {
+        sidebarToggleBtn.addEventListener('click', function() {
+          document.body.classList.toggle('sidebar-collapsed');
+          localStorage.setItem('sidebarState', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' : 'expanded');
+        });
+      }
+
+      // Read initialization structures from browser memory storage
+      const sessionUser = JSON.parse(localStorage.getItem('user') || 'null');
+      let coreUsersList = JSON.parse(localStorage.getItem('users') || '[]');
+      
+      if (!sessionUser) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Sync user profile options to use UI standard naming match ('user' mapping to Librarian Staff)
+      const roleSelect = document.getElementById('infoRole');
+      const roleNotice = document.getElementById('roleRestrictionNotice');
+      
+      // SECURITY SEKTAN LAYER: If logged profile matches 'user' (Librarian Staff), permanently lock control options
+      if (sessionUser.role === 'user') {
+        if (roleSelect) {
+          roleSelect.value = "user";
+          roleSelect.disabled = true;
+        }
+        if (roleNotice) {
+          roleNotice.textContent = "*Librarians are restricted from changing their own administrative privilege tiers.";
+          roleNotice.style.color = "#ef4444";
+          roleNotice.style.fontWeight = "600";
+        }
+      }
+
+      // Populate interface inputs and labels
+      // Populate interface inputs and labels
+      function refreshInterfaceDisplays() {
+        const nameText = sessionUser.name || sessionUser.username;
+        const computedRole = sessionUser.role || 'admin';
+        const computedEmail = sessionUser.email || "no-email@librarylms.com";
+
+        // Logic to match other pages
+        let displayRoleName = "Librarian Staff";
+        if(computedRole === 'admin') displayRoleName = "System Administrator";
+        if(computedRole === 'manager') displayRoleName = "Library Manager";
+
+        // Set form object variables
+        document.getElementById('infoUsername').value = sessionUser.username;
+        document.getElementById('infoFullName').value = nameText;
+        if(sessionUser.role !== 'user' && roleSelect) roleSelect.value = computedRole;
+        document.getElementById('infoEmail').value = sessionUser.email || '';
+
+        // Set left column overview card data
+        document.getElementById('sidebarCardName').textContent = nameText;
+        document.getElementById('sidebarCardEmail').textContent = computedEmail; 
+        document.getElementById('sidebarCardRole').textContent = displayRoleName.toUpperCase();
+
+        // Update shared navbar containers
+        document.getElementById('navProfileName').textContent = nameText;
+        document.getElementById('dropdownRoleTitle').textContent = displayRoleName;
+        document.getElementById('dropdownEmailText').textContent = computedEmail;
+      }
+      
+      refreshInterfaceDisplays();
+
+      // --- LOGIK MONITOR DAN PENGHASILAN JADUAL SENARAI AKAUN BAGI ADMIN ---
+      function renderAdminUserRegistry() {
+        const registrySection = document.getElementById('adminUserRegistrySection');
+        const tbody = document.querySelector('#adminUserTable tbody');
+
+        if (!registrySection || !tbody) return;
+
+        // Gatekeeping guard check: Only allow administrative viewing layers
+        if (sessionUser.role !== 'admin') {
+          registrySection.style.display = 'none';
+          return;
+        }
+
+        registrySection.style.display = 'block';
+        tbody.innerHTML = '';
+
+        if (coreUsersList.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:#94a3b8;"><i>No system profiles recorded inside live database cache.</i></td></tr>`;
+          return;
+        }
+
+        coreUsersList.forEach(u => {
+          let tierBadge = `<span class="badge-privilege badge-user">Librarian</span>`;
+          if (u.role === 'admin') tierBadge = `<span class="badge-privilege badge-admin">Admin</span>`;
+          if (u.role === 'manager') tierBadge = `<span class="badge-privilege badge-manager">Manager</span>`;
+
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td style="font-weight: 600;">${u.name || 'N/A'}</td>
+            <td><code>${u.username}</code></td>
+            <td>${u.email || '<i>No email recorded</i>'}</td>
+            <td>${tierBadge}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+
+      // Fire administrative table builder logic
+      renderAdminUserRegistry();
+
+      // Trigger Profile Information Submission Change
+      document.getElementById('profileInfoForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const targetEmail = document.getElementById('infoEmail').value.trim();
+        const targetName = document.getElementById('infoFullName').value.trim();
+        
+        // Prevent value hijack read manipulation on disabled components if role is locked
+        const targetRole = sessionUser.role === 'user' ? 'user' : roleSelect.value;
+
+        // 1. Save changes to current session object storage
+        sessionUser.name = targetName;
+        sessionUser.role = targetRole;
+        sessionUser.email = targetEmail;
+        localStorage.setItem('user', JSON.stringify(sessionUser));
+
+        // 2. CORE STORAGE SYNC: Persist changes back into main global users list array
+        coreUsersList = JSON.parse(localStorage.getItem('users') || '[]');
+        let userMatchIndex = coreUsersList.findIndex(u => u.username.toLowerCase() === sessionUser.username.toLowerCase());
+        
+        if (userMatchIndex !== -1) {
+          coreUsersList[userMatchIndex].name = targetName;
+          coreUsersList[userMatchIndex].role = targetRole;
+          coreUsersList[userMatchIndex].email = targetEmail;
+          localStorage.setItem('users', JSON.stringify(coreUsersList));
+        }
+
+        refreshInterfaceDisplays();
+        renderAdminUserRegistry(); // Live reload admin view registry table list
+        
+        // Ensure manual call fallback in main.js handles dark background reapplications cleanly
+        if(typeof initTheme === 'function') initTheme();
+        
+        showNotificationToast("Profile records modified successfully.", "#28a745");
+      });
+
+      // Trigger Password Credentials Form Processing
+      document.getElementById('securityCredentialsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const currentInput = document.getElementById('securityCurrentPass').value;
+        const newInput = document.getElementById('securityNewPass').value;
+        const confirmInput = document.getElementById('securityConfirmPass').value;
+
+        // Verification logic checks read from real users registry arrays
+        coreUsersList = JSON.parse(localStorage.getItem('users') || '[]');
+        let currentDBUser = coreUsersList.find(u => u.username.toLowerCase() === sessionUser.username.toLowerCase());
+        const actualSecret = currentDBUser ? (currentDBUser.password || currentDBUser.pass) : sessionUser.password;
+
+        if (currentInput !== actualSecret) {
+          showNotificationToast("Operation rejected: Current password input string mismatch.", "#dc3545");
+          return;
+        }
+
+        if (newInput !== confirmInput) {
+          showNotificationToast("Operation rejected: New confirmation string mismatch.", "#dc3545");
+          return;
+        }
+
+        // Commit updating execution inside session storage
+        sessionUser.password = newInput;
+        localStorage.setItem('user', JSON.stringify(sessionUser));
+        
+        // Sync password modification execution inside central database array
+        if (currentDBUser) {
+          if(currentDBUser.password) currentDBUser.password = newInput;
+          if(currentDBUser.pass) currentDBUser.pass = newInput;
+          localStorage.setItem('users', JSON.stringify(coreUsersList));
+        }
+        
+        this.reset();
+        showNotificationToast("Credential records modified. Use new variables at next access initialization.", "#28a745");
+      });
+
+      // System notification tracking window popups
+      function showNotificationToast(message, bgColor) {
+        const toast = document.getElementById('systemToastAlert');
+        if (toast) {
+          toast.textContent = message;
+          toast.style.background = bgColor;
+          toast.style.display = 'block';
+          setTimeout(() => { toast.style.display = 'none'; }, 4000);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

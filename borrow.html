@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library - Borrow Book</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" id="theme-style" href="css/darkmode.css" disabled>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-top-group">
+        <div class="sidebar-header">
+          <i class="fas fa-university"></i>
+          <span class="brand-text">Library LMS</span>
+        </div>
+        <ul>
+          <li><a href="dashboard.html"><i class="fas fa-home"></i> <span class="menu-text">Dashboard</span></a></li>
+          <li><a href="booklist.html"><i class="fas fa-book"></i> <span class="menu-text">Books</span></a></li>
+          <li><a href="category.html"><i class="fas fa-folder"></i> <span class="menu-text">Categories</span></a></li>
+          <li><a href="borrow.html" class="active"><i class="fas fa-book-reader"></i> <span class="menu-text">Borrow</span></a></li>
+          <li><a href="return.html"><i class="fas fa-undo"></i> <span class="menu-text">Return</span></a></li>
+          <li><a href="studentlist.html"><i class="fas fa-users"></i> <span class="menu-text">Students</span></a></li>
+          <li><a href="courselist.html"><i class="fas fa-list"></i> <span class="menu-text">Courses</span></a></li>
+          <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> <span class="menu-text">Logout</span></a></li>
+        </ul>
+      </div>
+      <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">
+        <i class="bi bi-moon-stars-fill" id="darkModeIcon"></i>
+      </button>
+    </aside>
+
+    <div class="content-wrapper">
+      <header class="main-top-navbar">
+        <div class="header-left-side">
+          <button id="sidebarToggleBtn" class="nav-toggle-btn"><i class="fa-solid fa-bars"></i></button>
+          <h1 class="page-current-title">Borrow Book</h1>
+        </div>
+        <div class="header-right-side">
+          <div class="profile-dropdown-container">
+            <button class="profile-trigger-btn" onclick="toggleProfileMenu()">
+              <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="navbar-avatar">
+              <span class="navbar-username" id="navProfileName">Guest User</span>
+              <i class="fa-solid fa-chevron-down arrow-icon"></i>
+            </button>
+            <div id="profileDropdownMenu" class="dropdown-actions-panel">
+              <div class="dropdown-header-info">
+                <strong id="dropdownRoleTitle">User Role</strong>
+                <small class="user-email-text" id="dropdownEmailText">username@library.com</small>
+              </div>
+              <hr class="divider-line">
+              <a href="profile-settings.html" class="dropdown-action-item"><i class="fa-solid fa-user-gear"></i> Account Settings</a>
+              <a href="#" class="dropdown-action-item logout-action" onclick="executeLogoutAction(event)"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div class="dashboard-header">
+          <h1><i class="fas fa-book-reader"></i> Book Issue Ledger</h1>
+        </div>
+
+        <div style="margin-bottom:1.5em;">
+          <button onclick="openBorrowModal()" id="addBorrowBtn"><i class="fas fa-plus"></i> Issue Book</button>
+        </div>
+
+          <div style="overflow-x: auto;">
+          <table id="borrowTable">
+            <thead>
+              <tr>
+                <th style="width:12%;">Issue Date</th>
+                <th style="width:12%;">Due Date</th>
+                <th style="width:28%;">Book Details</th>
+                <th style="width:23%;">Student Name</th>
+                <th style="width:13%;">Reg. No</th>
+                <th style="width:12%;" class="admin-only">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              </tbody>
+          </table>
+        </div>
+
+        <div class="modal" id="borrowModal">
+          <div class="modal-content">
+            <button class="close-modal" onclick="closeBorrowModal()">&times;</button>
+            <form id="borrowForm" autocomplete="off">
+              <h2>Issue Book</h2>
+              <select id="borrowBook" required>
+                <option value="">-- Select Available Book --</option>
+              </select>
+              <select id="borrowStudent" required>
+                <option value="">-- Select Student --</option>
+              </select>
+              <div style="margin:1.0em 0 0.7em;">
+                <button type="submit" id="borrowSaveBtn">Issue</button>
+                <button type="button" onclick="closeBorrowModal()">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="notification"></div>
+        <footer style="text-align: center; padding: 20px 10px; margin-top: 40px; font-size: 0.85rem; color: #888; border-top: 1px solid rgba(0,0,0,0.08); width: 100%;">
+          <div style="margin-bottom: 5px; font-weight: 600; letter-spacing: 0.3px;">
+            Library LMS &bull; Advanced Web Application Interface
+          </div>
+          <div style="font-size: 0.80rem; opacity: 0.8;">
+            &copy; 2026 Universiti Teknologi MARA (UiTM) &bull; IMS566 Individual Project Assignment
+          </div>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/borrow.js"></script>
+  <script src="js/seed-data.js"></script>
+
+  <script>
+    // System Page Controller Scripts
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const themeStyle = document.getElementById('theme-style');
+
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    applyTheme(savedTheme);
+
+    darkModeToggle.addEventListener('click', () => {
+      const currentTheme = localStorage.getItem('theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      applyTheme(newTheme);
+    });
+
+    function applyTheme(theme) {
+      localStorage.setItem('theme', theme);
+      if (theme === 'dark') {
+        if(themeStyle) themeStyle.disabled = false;
+        if(darkModeIcon) darkModeIcon.className = 'bi bi-sun-fill';
+        document.body.classList.add('dark-theme');
+      } else {
+        if(themeStyle) themeStyle.disabled = true;
+        if(darkModeIcon) darkModeIcon.className = 'bi bi-moon-stars-fill';
+        document.body.classList.remove('dark-theme');
+      }
+    }
+
+    function toggleProfileMenu() {
+      document.getElementById('profileDropdownMenu').classList.toggle('show');
+    }
+
+    window.addEventListener('click', function(event) {
+      if (!event.target.closest('.profile-dropdown-container')) {
+        const dropdown = document.getElementById('profileDropdownMenu');
+        if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
+      }
+    });
+
+    function executeLogoutAction(event) {
+      event.preventDefault();
+      if (confirm("Are you sure you want to log out?")) {
+        localStorage.removeItem('user'); 
+        window.location.href = 'login.html';
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const sessionUser = JSON.parse(localStorage.getItem('user') || 'null');
+      if (sessionUser) {
+        let role = "Librarian Staff";
+        if(sessionUser.role === 'admin') role = "System Administrator";
+        if(sessionUser.role === 'manager') role = "Library Manager";
+
+        document.getElementById('navProfileName').textContent = sessionUser.name || sessionUser.username;
+        document.getElementById('dropdownRoleTitle').textContent = role;
+        document.getElementById('dropdownEmailText').textContent = `${sessionUser.username.toLowerCase()}@librarylms.com`;
+      }
+
+      const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+      if (sidebarToggleBtn) {
+        if (localStorage.getItem('sidebarState') === 'collapsed') document.body.classList.add('sidebar-collapsed');
+        sidebarToggleBtn.addEventListener('click', function() {
+          document.body.classList.toggle('sidebar-collapsed');
+          localStorage.setItem('sidebarState', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' : 'expanded');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
