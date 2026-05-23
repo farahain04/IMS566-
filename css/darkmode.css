@@ -1,0 +1,51 @@
+:root {
+  --primary: #a5b4fc;
+  --success: #65da9f;
+  --danger: #fc648f;
+  --bg: #1a202c;
+  --sidebar-bg: #121826;
+  --sidebar-hover: #243049;
+  --card: #232738;
+  --txt: #e6e6f5;
+}
+
+body {
+  background: var(--bg);
+  color: var(--txt);
+}
+main {
+  background: var(--bg);
+  color: var(--txt);
+}
+[data-bs-theme="dark"] {
+  --card: #334155;
+  --txt: #e2e8f0;
+  /* etc */
+}
+h1, h2 {color: #b3b9f1;}
+.sidebar {background:var(--sidebar-bg);}
+.sidebar a, #darkModeBtn {color:#e5e8fa;}
+.sidebar a.active, .sidebar a:hover {background:var(--sidebar-hover);}
+.card {background:var(--card); color:var(--txt);}
+table {background:var(--card);}
+th, td {background:none; color:var(--txt);}
+th {background:#252c41;}
+input, select {background:#222637; color:#ede; border-color:#444454;}
+input:focus, select:focus {border-color:var(--primary);}
+.modal .modal-content {background:#222638; color:var(--txt);}
+button { background:var(--primary);}
+button:hover, input[type=submit]:hover { background:#374594;}
+.action-btns .edit {background:#35d58b;}
+.action-btns .edit:hover{background:#117159;}
+.action-btns .del {background:#f87171;}
+.action-btns .del:hover{background:#911b28;}
+.action-btns .info {background:var(--primary);}
+.toast {
+  background:var(--primary);
+  color:#fff;
+}
+.toast.danger {
+  background:var(--danger);
+}
+.toast.info {background:var(--primary);}
+#notification { background:none;}

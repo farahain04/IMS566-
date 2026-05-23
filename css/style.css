@@ -1,0 +1,758 @@
+/* ==========================================================================
+   1. SYSTEM VARIABLES & CORE BASE
+   ========================================================================== */
+:root {
+  --primary: #2563eb;
+  --success: #22c55e;
+  --danger: #f43f5e;
+  --bg: #f5f7fa;
+  --sidebar-bg: #232f3e;
+  --sidebar-hover: #415166;
+  --card: #fff;
+  --txt: #222;
+}
+
+* { 
+  box-sizing: border-box; 
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+  overflow-x: hidden;
+}
+
+h1, h2 { 
+  color: var(--primary); 
+}
+
+h1 { 
+  margin-top: 0; 
+}
+
+/* Icons Global Spacing */
+i {
+  margin-right: 6px;
+}
+.sidebar a i {
+  margin-right: 14px;
+  font-size: 1.1em;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+button i {
+  margin-right: 6px;
+}
+h1 i, h2 i {
+  margin-right: 10px;
+  color: var(--primary);
+}
+
+/* ==========================================================================
+   2. FLEXBOX WINDOW GRID GRAPHIC INNER FRAMEWORK
+   ========================================================================== */
+.app-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* SIDEBAR LAYOUT CONFIG */
+.sidebar {
+  width: 240px; 
+  height: 100vh;
+  background: var(--sidebar-bg);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 10;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-top-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li { 
+  margin: 0; 
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  padding: 14px 24px;
+  border-left: 4px solid transparent;
+  transition: background 0.2s, border-left 0.2s;
+  white-space: nowrap;
+}
+
+.sidebar a.active,
+.sidebar a:hover {
+  background: var(--sidebar-hover);
+  border-left: 4px solid var(--primary);
+}
+
+.sidebar-header {
+  padding: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* CONTENT CONTAINER WRAPPER */
+.content-wrapper {
+  flex-grow: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+main {
+  flex-grow: 1;
+  padding: 24px 30px;
+  overflow-y: auto;
+  background: var(--bg);
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   3. JAVASCRIPT COLLAPSED SIDEBAR MODIFIER CODES
+   ========================================================================== */
+.sidebar-collapsed .sidebar {
+  width: 65px; 
+}
+
+.sidebar-collapsed .brand-text,
+.sidebar-collapsed .menu-text {
+  opacity: 0;
+  visibility: hidden;
+  width: 0;
+  display: none; 
+}
+
+.sidebar-collapsed .sidebar-header {
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.sidebar-collapsed .sidebar a {
+  justify-content: center;
+  padding: 14px 0;
+  border-left: 4px solid transparent;
+}
+
+.sidebar-collapsed .sidebar a i {
+  margin-right: 0;
+}
+
+/* ==========================================================================
+   4. COMPACT TOP NAVBAR & PROFILE DROPDOWN
+   ========================================================================== */
+.main-top-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 24px;   
+  height: 55px;         
+  background: #232f3e; 
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.header-left-side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-toggle-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.page-current-title {
+  font-size: 1.25rem;   
+  margin: 0;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.profile-dropdown-container {
+  position: relative;
+}
+
+.profile-trigger-btn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 30px;
+}
+
+.profile-trigger-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.navbar-avatar {
+  width: 32px; 
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.navbar-username {
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 0.9rem;
+  margin-right: 6px;
+}
+
+/* DROPDOWN OPTIONS SYSTEM PANEL */
+.dropdown-actions-panel {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 42px; 
+  background: #ffffff;
+  min-width: 210px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  padding: 8px 0;
+  z-index: 1000;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-actions-panel.show { 
+  display: block; 
+}
+
+.dropdown-header-info { 
+  padding: 8px 20px; 
+  display: flex; 
+  flex-direction: column; 
+  color: #333; 
+}
+
+.user-email-text { 
+  color: #858796; 
+  font-size: 0.78rem; 
+}
+
+.divider-line { 
+  border: 0; 
+  border-top: 1px solid rgba(0, 0, 0, 0.06); 
+  margin: 6px 0; 
+}
+
+.dropdown-action-item {
+  display: block;
+  padding: 10px 20px;
+  color: #2d3748;
+  text-decoration: none;
+  font-size: 0.88rem;
+}
+
+.dropdown-action-item:hover { 
+  background: rgba(0, 0, 0, 0.03); 
+}
+
+.logout-action { 
+  color: #dc3545 !important; 
+}
+
+.logout-action:hover { 
+  background: rgba(220, 53, 69, 0.04); 
+}
+
+/* ==========================================================================
+   5. MODERN 4-COLUMN METRIC CARDS ROW
+   ========================================================================== */
+.dashboard-metrics-container {
+  display: flex;
+  gap: 16px; 
+  margin: 10px 0 24px 0;
+  flex-wrap: wrap;
+}
+
+.metric-card-modern {
+  flex: 1;
+  min-width: 220px; 
+  background: var(--card);
+  border-radius: 10px;
+  padding: 16px 20px; 
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card-modern:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.metric-icon-box {
+  width: 48px;  
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.books-card .metric-icon-box { background: rgba(78, 115, 223, 0.1); color: #4e73df; }
+.students-card .metric-icon-box { background: rgba(28, 200, 138, 0.1); color: #1cc88a; }
+.borrows-card .metric-icon-box { background: rgba(246, 194, 62, 0.1); color: #f6c23e; }
+.returns-card .metric-icon-box { background: rgba(231, 74, 59, 0.1); color: #e74a3b; }
+
+.metric-info-box { 
+  display: flex; 
+  flex-direction: column; 
+}
+
+.metric-label { 
+  font-size: 0.78rem; 
+  color: #858796; 
+  font-weight: 700; 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+}
+
+.metric-value { 
+  margin: 2px 0 0 0; 
+  font-size: 1.5rem; 
+  font-weight: 700; 
+  color: var(--txt); 
+}
+
+/* Legacy Fallback Cards Block */
+.dashboard-cards {
+  display: flex;
+  gap: 22px;
+  margin: 2.1em 0 2.5em 0;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1; 
+  min-width: 140px;
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.05);
+  padding: 2em;
+  text-align: center;
+  font-size: 1.16rem;
+  transition: .18s;
+}
+
+.card h2 { margin-bottom: 0.2em; }
+.card div { font-size: 2em; font-weight: 700; }
+.card.card-link { cursor: pointer; }
+.card.card-link:hover {
+  box-shadow: 0 8px 24px rgba(37,99,235,0.18);
+}
+
+/* ==========================================================================
+   6. CHARTS & QUICK STATS CONTAINER LAYOUT PANELS
+   ========================================================================== */
+.chart-stats-container {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+  flex-wrap: wrap; 
+}
+
+.chart-box {
+  flex: 2; 
+  min-width: 300px;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.quick-stats-box {
+  flex: 1; 
+  min-width: 250px;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* Quick Stats List rows */
+.stats-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stats-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.stats-list li:last-child {
+  border-bottom: none;
+}
+
+/* ==========================================================================
+   7. INTERACTIVE INPUT FORMS & DATA TABLES
+   ========================================================================== */
+table {
+  margin-top: 1.7em;
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border-radius: 8px;
+  box-shadow: 0 1px 10px rgba(42,42,42,0.06);
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px 18px;
+  text-align: left;
+}
+
+th {
+  background: #e8edf2;
+  font-weight: 500;
+  color: #182b53;
+}
+
+td {
+  border-bottom: 1px solid #eef2f4;
+  vertical-align: middle;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Action Buttons Grid Setup */
+th:last-child, td:last-child {
+  text-align: center;
+  min-width: 180px;
+}
+
+.action-btns {
+  display: flex !important;
+  gap: 8px !important;
+  justify-content: center !important;
+  flex-wrap: nowrap !important;
+}
+
+.action-btns button {
+  padding: 6px 12px !important;
+  font-size: 0.9em !important;
+  margin: 0 !important;
+  white-space: nowrap;
+}
+
+.action-btns .edit { background: #10b981; }
+.action-btns .edit:hover { background: #15803d; }
+.action-btns .del { background: #ef4444; }
+.action-btns .del:hover { background: #7f1d1d; }
+.action-btns .info { background: var(--primary); }
+
+/* Global Form Element Wrappers */
+button, input[type=submit] {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 5px;
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.16s;
+  margin: 2px;
+}
+
+button:hover, input[type=submit]:hover {
+  background: #1c4487;
+}
+
+input[type="text"], input[type="password"], input[type="number"], input[type="email"], select {
+  padding: 8px;
+  width: 100%;
+  max-width: 270px;
+  border: 1.3px solid #d1d5db;
+  border-radius: 5px;
+  font-size: 1em;
+  margin-bottom: 0.9em;
+  outline: none;
+  transition: border .15s;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, input[type="email"]:focus, select:focus {
+  border: 1.2px solid var(--primary);
+}
+
+/* 1. Hide the admin elements and column pieces cleanly */
+body:not(.role-admin) .admin-only {
+  display: none !important;
+}
+
+/* 2. RE-BALANCE TABLE LAYOUT FOR NON-ADMINS */
+body:not(.role-admin) #bookTable th,
+body:not(.role-admin) #bookTable td {
+  width: auto !important; 
+}
+
+body:not(.role-admin) #bookTable th:first-child {
+  width: 40% !important;
+}
+
+/* ==========================================================================
+   8. SYSTEM DIALOG MODALS & TOAST ALERTS
+   ========================================================================== */
+.modal {
+  display: none; 
+  position: fixed; 
+  top: 0; left: 0; 
+  width: 100vw; height: 100vh;
+  align-items: center; 
+  justify-content: center;
+  background: rgba(0,0,0,0.15); 
+  z-index: 101;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal .modal-content {
+  background: #fff; 
+  padding: 34px 34px;
+  border-radius: 14px; 
+  position: relative;
+  min-width: 320px; 
+  max-width: 90vw;
+  box-shadow: 0 6px 36px rgba(0,0,0,0.16);
+  animation: modIn .18s;
+}
+
+@keyframes modIn {
+  from { transform: scale(0.85); } 
+  to { transform: scale(1); }
+}
+
+.close-modal {
+  position: absolute;
+  top: 11px;
+  right: 16px;
+  font-size: 1.33em;
+  background: none;
+  border: none; 
+  color: #344;
+  cursor: pointer;
+}
+
+/* Toasts Alert Bar styles */
+#notification {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 200;
+}
+
+.toast {
+  background: var(--success); 
+  color: #fff; 
+  margin: 4px 0; 
+  padding: 13px 20px;
+  border-radius: 8px;
+  min-width: 140px;
+  font-size: 1.02em;
+  box-shadow: 0 7px 24px rgba(0,0,0,0.05);
+}
+.toast.danger { background: var(--danger); }
+.toast.info { background: var(--primary); }
+
+/* ==========================================================================
+   9. DARK THEME SWITCH OVERRIDES
+   ========================================================================== */
+#darkModeToggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+}
+
+#darkModeToggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+body.dark-theme .chart-box,
+body.dark-theme .quick-stats-box {
+  background: #1e293b !important; 
+  color: #f8fafc !important;      
+}
+
+body.dark-theme .stats-list li {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.role-user .admin-only {
+  display: none !important;
+}
+
+/* ==========================================================================
+   10. MOBILE RESPONSIVE MEDIA QUERIES (UPDATED)
+   ========================================================================== */
+
+@media screen and (max-width: 992px) {
+  .dashboard-metrics-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  /* 1. Off-Canvas Sidebar Setup */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px; /* Hidden by default on mobile */
+    height: 100vh;
+    z-index: 9999;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+  }
+
+  /* When JS toggles 'sidebar-collapsed', slide the menu into view */
+  body.sidebar-collapsed .sidebar {
+    left: 0;
+    width: 240px; 
+  }
+
+  /* Restore text visibility inside the sliding mobile menu */
+  .sidebar-collapsed .brand-text,
+  .sidebar-collapsed .menu-text {
+    opacity: 1;
+    visibility: visible;
+    width: auto;
+    display: inline; 
+  }
+
+  .sidebar-collapsed .sidebar-header {
+    justify-content: flex-start;
+    padding: 20px;
+  }
+
+  .sidebar-collapsed .sidebar a {
+    justify-content: flex-start;
+    padding: 14px 24px;
+  }
+
+  /* 2. Main content takes full width */
+  .content-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding-bottom: 20px;
+  }
+
+  /* 3. Adjust Navbar styling for small screens */
+  .main-top-navbar {
+    padding: 10px 15px;
+  }
+  
+  .page-current-title {
+    font-size: 1.15rem;
+  }
+
+  .navbar-username {
+    display: none; /* Hide text, keep only avatar */
+  }
+
+  /* 4. Force tables to allow horizontal scrolling (prevents screen breaking) */
+  table {
+    min-width: 750px; 
+  }
+  
+  /* 5. Stack metrics and structural grids vertically */
+  .dashboard-metrics-container, .dashboard-cards {
+    grid-template-columns: 1fr !important; 
+    flex-direction: column;
+  }
+
+  /* 6. Modals take up more screen space on mobile */
+  .modal .modal-content {
+    width: 92vw !important;
+    padding: 20px !important;
+    margin: 10% auto;
+  }
+
+  /* 7. Forms and Inputs full width */
+  .form-row-layout.dual-column {
+    grid-template-columns: 1fr !important;
+  }
+  
+  input[type="search"], select, input[type="text"], input[type="password"], input[type="email"], input[type="number"] {
+    max-width: 100% !important;
+  }
+  
+  .chart-stats-container {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /* Smaller adjustments for very tight phone screens */
+  .chart-wrapper-fixed {
+    height: 250px !important;
+  }
+  
+  .metric-card-modern {
+    padding: 15px !important;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 1.3rem;
+  }
+}
